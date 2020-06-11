@@ -7,6 +7,7 @@ const {User, validate} = require('../models/user');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const logger = require('../service/logger');
 
 router.get('/me', auth, async (req, res) => {
   const user = await User.findById(req.user._id).select('-password');
@@ -24,8 +25,10 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
-
+  
+  
   const token = user.generateAuthToken();
+  logger.info(`add new user ${JSON.stringify({user, token})}`);
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 
