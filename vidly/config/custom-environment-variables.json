@@ -1,4 +1,5 @@
 {
-    "jwtPrivateKey": "jwtPrivateKey"
+    "jwtPrivateKey": "jwtPrivateKey",
+    "db_url": "db_url"
 }
   
