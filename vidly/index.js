@@ -10,7 +10,6 @@ const users = require('./routes/users');
 const auth = require('./routes/auth');
 const express = require('express');
 const app = express();
-const {subscribeCreateMOvie} = require('./service/movie');
 
 console.log('configgg = ', config);
 if (!config.get('jwtPrivateKey')) {
@@ -18,7 +17,7 @@ if (!config.get('jwtPrivateKey')) {
   process.exit(1);
 }
 
-mongoose.connect('mongodb://localhost/vidly')
+mongoose.connect(config.get('db_url'))
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...'));
 
@@ -29,6 +28,8 @@ app.use((req, res, next) => {
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"
     );
+
+    res.header("Access-Control-Expose-Headers", "x-auth-token");
     next();
   });
   
@@ -41,7 +42,7 @@ app.use('/api/users', users);
 app.use('/api/auth', auth);
 
 
-subscribeCreateMOvie();
+//subscribeCreateMOvie();
 
 const port = process.env.PORT || 3900;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
