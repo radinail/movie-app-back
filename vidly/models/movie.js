@@ -26,7 +26,7 @@ const Movie = mongoose.model('Movies', new mongoose.Schema({
     min: 0,
     max: 255
   }
-}));
+}), 'Movies');
 
 function validateMovie(movie) {
   const schema = {
